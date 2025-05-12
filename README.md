@@ -47,4 +47,5 @@ If the "C" button is pressed, the display field is cleared, and the stored expre
 For all other buttons (numbers and operations), the label of the pressed button is appended to the current expression. The updated expression is then displayed in the display field.
 
 > **Conclusion:**
+
 The scientific calculator GUI provides a comprehensive tool for performing mathematical calculations in a user-friendly manner. It supports both basic and advanced functions, allowing users to switch between angle modes and handle complex expressions. The design ensures that users can easily input their calculations and receive immediate feedback on their results.
