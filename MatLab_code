@@ -1,0 +1,99 @@
+function scientificCalculatorGUI()
+    % Define figure window
+    figWidth = 250;
+    figHeight = 500;
+    fig = uifigure('Name','Scientific Calculator','Position',[400 200 figWidth figHeight]);
+    fig.Color = [0.96 0.96 1];  % Light blue background
+
+    % Display area (fully visible at top)
+    displayHeight = 40;
+    displayField = uieditfield(fig, 'text', ...
+        'Position', [20 figHeight - displayHeight - 20, figWidth - 40, displayHeight], ...
+        'FontSize', 22, ...
+        'HorizontalAlignment', 'right', ...
+        'Editable', 'off', ...
+        'BackgroundColor', 'white');
+
+    setappdata(fig, 'expression', '');
+
+    % Angle mode switch
+    uilabel(fig, 'Text', 'Angle:', ...
+        'Position', [250 25 30 5], ...
+        'FontWeight', 'bold');
+    angleSwitch = uiswitch(fig, 'slider', ...
+        'Items', {'Deg', 'Rad'}, ...
+        'Position', [104 14 45 18], ...
+        'Value', 'Deg');
+    setappdata(fig, 'AngleSwitch', angleSwitch);
+
+    % Button labels (6 rows x 5 columns)
+    labels = {
+        '7','8','9','/','sin';
+        '4','5','6','*','cos';
+        '1','2','3','-','tan';
+        '0','.','=','+','sqrt';
+        'log','ln','^','C','abs';
+        'exp','mod','pi','(',')'
+    };
+
+    % Button layout settings
+    buttonWidth = 40;
+    buttonHeight = 40;
+    spacingX = 5;
+    spacingY = 5;
+    startX = 20;
+    startY = figHeight - displayHeight - 70;
+
+    % Create buttons
+    for i = 1:size(labels,1)
+        for j = 1:size(labels,2)
+            label = labels{i,j};
+            x = startX + (j-1)*(buttonWidth + spacingX);
+            y = startY - (i)*(buttonHeight + spacingY);
+            uibutton(fig, ...
+                'Text', label, ...
+                'Position', [x y buttonWidth buttonHeight], ...
+                'FontSize', 14, ...
+                'FontWeight', 'bold', ...
+                'BackgroundColor', [0.82 0.90 1], ...
+                'ButtonPushedFcn', @(btn, event) handleButtonPress(fig, displayField, label));
+        end
+    end
+end
+
+function handleButtonPress(fig, displayField, label)
+    expression = getappdata(fig, 'expression');
+    angleSwitch = getappdata(fig, 'AngleSwitch');
+    useDegrees = strcmp(angleSwitch.Value, 'Deg');
+
+    switch label
+        case '='
+            try
+                expr = expression;
+                if useDegrees
+                    expr = regexprep(expr, 'sin\((.*?)\)', 'sind($1)');
+                    expr = regexprep(expr, 'cos\((.*?)\)', 'cosd($1)');
+                    expr = regexprep(expr, 'tan\((.*?)\)', 'tand($1)');
+                end
+                expr = strrep(expr, '^', '.^');
+                expr = strrep(expr, 'ln', 'log');
+                expr = strrep(expr, 'log', 'log10');
+                result = eval(expr);
+                displayField.Value = num2str(result);
+                setappdata(fig, 'expression', num2str(result));
+            catch
+                displayField.Value = 'Error';
+                setappdata(fig, 'expression', '');
+            end
+
+        case 'C'
+            displayField.Value = '';
+            setappdata(fig, 'expression', '');
+
+        otherwise
+            expression = [expression label];
+            displayField.Value = expression;
+            setappdata(fig, 'expression', expression);
+    end
+end
+
