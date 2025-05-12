@@ -1,6 +1,6 @@
-# Scientific-Calculator-
-Scientific Calculator GUI Functionality
-Overview
+
+> **Scientific Calculator GUI Functionality
+> Overview**
 The scientific calculator is implemented as a graphical user interface (GUI) in MATLAB. It allows users to perform a variety of mathematical operations, including basic arithmetic and advanced functions like trigonometric calculations, logarithms, and more. The interface is designed to be user-friendly, with buttons for each operation and a display area for showing results.
 
 Components
