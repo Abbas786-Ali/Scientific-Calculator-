@@ -1,5 +1,5 @@
-
-Scientific Calculator GUI Functionality
+**
+Scientific Calculator GUI Functionality**
 
 Overview
 > 
